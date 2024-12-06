@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import retrofit2.HttpException
@@ -59,18 +60,35 @@ class UserRepository(
                 emit(Result.Success(response)) // Emit response sukses
             } catch (e: HttpException) {
                 val errorBody = e.response()?.errorBody()?.string()
-                val errorMessage = if (errorBody != null) {
-                    Gson().fromJson(errorBody, ErrorResponse::class.java).message
-                } else {
-                    "Terjadi kesalahan tidak diketahui"
-                }
+                val errorMessage = errorBody?.let {
+                    Gson().fromJson(it, ErrorResponse::class.java).message
+                } ?: "Kesalahan tidak diketahui"
                 emit(Result.Error(Exception(errorMessage)))
             } catch (e: IOException) {
                 emit(Result.Error(Exception("Koneksi gagal. Pastikan perangkat Anda terhubung ke internet.")))
-            } catch (e: Exception) {
-                emit(Result.Error(Exception("Error tidak diketahui: ${e.message}")))
             }
         }.flowOn(Dispatchers.IO)
+    }
+
+    fun getStories(): Flow<Result<List<ListStoryItem>?>> {
+        return flow {
+            emit(Result.Loading)
+            try {
+                val token = dataStoreHelper.token.first() ?: ""
+                val response = apiService.getStories("Bearer $token")
+                val filteredStories = response.listStory?.filterNotNull() // Filter elemen null
+                emit(Result.Success(filteredStories))
+            } catch (e: HttpException) {
+                emit(Result.Error(Exception(e.message())))
+            } catch (e: IOException) {
+                emit(Result.Error(Exception("Koneksi gagal")))
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+
+    suspend fun clearSession() {
+        dataStoreHelper.clearToken()
     }
 
 }

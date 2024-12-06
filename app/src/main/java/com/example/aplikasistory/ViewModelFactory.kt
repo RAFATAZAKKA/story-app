@@ -6,12 +6,17 @@ import com.example.aplikasistory.data.AuthRepository
 import com.example.aplikasistory.data.AuthViewModel
 import com.example.aplikasistory.data.UserRepository
 
-class ViewModelFactory(private val repository: UserRepository) : ViewModelProvider.Factory {
+class ViewModelFactory(private val userRepository: UserRepository) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return AuthViewModel(repository) as T
+        return when {
+            modelClass.isAssignableFrom(StoryViewModel::class.java) -> {
+                StoryViewModel(userRepository) as T
+            }
+            modelClass.isAssignableFrom(AuthViewModel::class.java) -> {
+                AuthViewModel(userRepository) as T
+            }
+            else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

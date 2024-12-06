@@ -3,8 +3,10 @@ package com.example.aplikasistory
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +17,7 @@ import com.example.aplikasistory.data.Injection
 
 class RegisterActivity : AppCompatActivity() {
 
+    private lateinit var progressBar: ProgressBar
     private val viewModel: AuthViewModel by viewModels {
         ViewModelFactory(Injection.provideRepository(this))
     }
@@ -23,6 +26,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        progressBar = findViewById(R.id.progressBar)
         val nameField = findViewById<EditText>(R.id.ed_register_name)
         val emailField = findViewById<EditText>(R.id.ed_register_email)
         val passwordField = findViewById<EditText>(R.id.ed_register_password)
@@ -30,12 +34,17 @@ class RegisterActivity : AppCompatActivity() {
 
         viewModel.registerResult.observe(this) { result ->
             when (result) {
-                is Result.Loading -> registerButton.isEnabled = false
+                is Result.Loading -> {
+                    progressBar.visibility = View.VISIBLE
+                    registerButton.isEnabled = false
+                }
                 is Result.Success -> {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(this, result.data.message ?: "Register Berhasil", Toast.LENGTH_SHORT).show()
                     finish()
                 }
                 is Result.Error -> {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(this, "Error: ${result.exception.message}", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -71,3 +80,4 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 }
+

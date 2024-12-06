@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- ImageView untuk gambar cerita -->
+    <ImageView
+        android:id="@+id/iv_story"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/story_image"
+        android:transitionName="photo_transition" />
+
+    <!-- Judul cerita -->
+    <TextView
+        android:id="@+id/tv_story_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:paddingTop="4dp" />
+
+    <!-- Deskripsi cerita -->
+    <TextView
+        android:id="@+id/tv_story_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="2dp" />
+</LinearLayout>

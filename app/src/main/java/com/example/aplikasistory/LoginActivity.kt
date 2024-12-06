@@ -3,8 +3,10 @@ package com.example.aplikasistory
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
+    private lateinit var progressBar: ProgressBar
     private val viewModel: AuthViewModel by viewModels {
         ViewModelFactory(Injection.provideRepository(this))
     }
@@ -25,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        progressBar = findViewById(R.id.progressBar)
         val emailField = findViewById<EditText>(R.id.ed_login_email)
         val passwordField = findViewById<EditText>(R.id.ed_login_password)
         val loginButton = findViewById<Button>(R.id.btn_login)
@@ -33,14 +37,17 @@ class LoginActivity : AppCompatActivity() {
         viewModel.loginResult.observe(this) { result ->
             when (result) {
                 is Result.Loading -> {
+                    progressBar.visibility = View.VISIBLE
                     loginButton.isEnabled = false
                 }
                 is Result.Success -> {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
                 is Result.Error -> {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(this, "Error: ${result.exception.message}", Toast.LENGTH_SHORT).show()
                     Log.e("LoginActivity", "Login Error: ${result.exception.message}", result.exception)
                 }

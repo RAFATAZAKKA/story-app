@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 // Ekstensi Context untuk DataStore
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_prefs")
+val Context.dataStore: androidx.datastore.core.DataStore<Preferences> by preferencesDataStore(name = "user_prefs")
 
 class DataStoreHelper(private val context: Context) {
 

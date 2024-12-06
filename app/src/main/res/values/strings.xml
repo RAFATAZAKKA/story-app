@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Aplikasi Story</string>
+    <string name="story_image">Image of the story</string>
 </resources>

@@ -2,12 +2,14 @@ package com.example.aplikasistory.data.api
 
 import com.example.aplikasistory.data.response.LoginResponse
 import com.example.aplikasistory.data.response.RegisterResponse
+import com.example.aplikasistory.data.response.Story
 import com.example.aplikasistory.data.response.StoryResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
     @FormUrlEncoded
@@ -29,4 +31,9 @@ interface ApiService {
     suspend fun getStories(
         @Header("Authorization") token: String
     ): StoryResponse
+
+    @GET("stories/{id}")
+    suspend fun getStoryDetail(@Path("id") storyId: String): Story
+
+
 }
