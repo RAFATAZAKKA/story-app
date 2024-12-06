@@ -13,10 +13,12 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.aplikasistory.add_story.AddStoryActivity
 import com.example.aplikasistory.data.Injection
 import com.example.aplikasistory.data.Result
 import com.example.aplikasistory.data.StoryAdapter
 import com.example.aplikasistory.data.response.ListStoryItem
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
@@ -93,6 +95,12 @@ class MainActivity : AppCompatActivity() {
 
         // Ambil cerita saat halaman dimuat
         viewModel.fetchStories()
+
+        val fab: FloatingActionButton = findViewById(R.id.fab) // Pastikan ID sesuai dengan FloatingActionButton di XML
+        fab.setOnClickListener {
+            val intent = Intent(this, AddStoryActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 
@@ -119,4 +127,5 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
+
 }

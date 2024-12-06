@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Izin akses internet -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
 
     <application
         android:allowBackup="true"
@@ -15,10 +18,15 @@
         android:theme="@style/Theme.AplikasiStory"
         tools:targetApi="31">
         <activity
-            android:name=".StoryDetailActivity"
-            android:theme="@style/AppTheme"
+            android:name=".add_story.CameraActivity"
             android:exported="false" />
-        <!-- WelcomeActivity sebagai halaman awal aplikasi -->
+        <activity
+            android:name=".add_story.AddStoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StoryDetailActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" /> <!-- WelcomeActivity sebagai halaman awal aplikasi -->
         <activity
             android:name=".WelcomeActivity"
             android:exported="true">
@@ -37,6 +45,30 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
+        <service
+            android:name="com.google.android.gms.metadata.ModuleDependencies"
+            android:enabled="false"
+            android:exported="false"
+            tools:ignore="MissingClass">
+            <intent-filter>
+                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+            </intent-filter>
+
+            <meta-data
+                android:name="photopicker_activity:0:required"
+                android:value="" />
+        </service>
     </application>
 
 </manifest>

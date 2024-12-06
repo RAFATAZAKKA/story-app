@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Aplikasi Story</string>
     <string name="story_image">Image of the story</string>
+    <string name="camera_x">CameraX</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+    <string name="upload">Unggah</string>
+    <string name="description">Enter a description...</string>
+    <string name="add_story">Add a new story</string>
+    <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
 </resources>
