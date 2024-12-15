@@ -1,73 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:padding="16dp">
+    tools:context=".WelcomeActivity">
 
-    <!-- Logo -->
     <ImageView
-        android:id="@+id/logo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/ic_logo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp" />
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/image_welcome" />
 
-    <!-- Nama Aplikasi -->
     <TextView
-        android:id="@+id/app_name"
-        android:layout_width="wrap_content"
+        android:id="@+id/titleTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/logo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text="Aplikasi\n  Story"
-        android:textColor="#0B75BC"
-        android:textSize="45sp"
-        android:textStyle="bold" />
-
-    <!-- Subtitle -->
-    <TextView
-        android:id="@+id/subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/app_name"
-        android:layout_centerHorizontal="true"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
-        android:text="Bangkit Capturer"
-        android:textColor="#0B75BC"
-        android:textSize="20sp" />
+        android:layout_marginEnd="32dp"
+        android:text="@string/title_welcome_page"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:alpha="0"
+        tools:alpha="100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal" />
 
-    <!-- Tombol Login -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_login"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/descTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/subtitle"
-        android:layout_marginTop="110dp"
-        android:layout_marginHorizontal="20dp"
-        app:cornerRadius="30dp"
-        app:backgroundTint="@null"
-        android:background="@drawable/rounded_button"
-        android:text="Log In"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp" />
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/message_welcome_page"
+        android:textColor="@color/navy"
+        android:textSize="14sp"
+        android:alpha="0"
+        tools:alpha="100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
-    <!-- Tombol Sign Up -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_sign_up"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_login"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="20dp"
-        app:cornerRadius="30dp"
-        app:backgroundTint="@null"
-        android:background="@drawable/button_signup"
-        android:text="Sign Up"
-        android:textColor="#2962FF"
-        android:textSize="18sp" />
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/navy"
+        android:text="@string/login"
+        android:alpha="0"
+        tools:alpha="100"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descTextView" />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/signupButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/navy"
+        android:text="@string/signup"
+        android:alpha="0"
+        tools:alpha="100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@+id/descTextView" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVertical"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

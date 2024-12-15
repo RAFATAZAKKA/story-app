@@ -22,16 +22,22 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var sessionManager: SessionManager
     private val viewModel: StoryViewModel by viewModels {
         ViewModelFactory(Injection.provideRepository(this))
     }
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var adapter: StoryAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Cek status login, jika tidak login, kembali ke LoginActivity
+        sessionManager = SessionManager(this)
+        if (!sessionManager.isLoggedIn()) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_main)
 
         // Toolbar
@@ -39,71 +45,42 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // RecyclerView dan SwipeRefresh
-        recyclerView = findViewById(R.id.rv_stories)
-        swipeRefreshLayout = findViewById(R.id.swipe_refresh)
-
+        val recyclerView = findViewById<RecyclerView>(R.id.rv_stories)
+        val swipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
         val adapter = StoryAdapter { story, sharedView ->
             val intent = Intent(this, StoryDetailActivity::class.java).apply {
-                putExtra("story_detail", story) // Parcelable untuk mengirim data
+                putExtra("story_detail", story)
             }
-
-            // Buat shared element transition
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                this,
-                sharedView, // View yang akan digunakan untuk shared element
-                "photo_transition" // Nama transisi sesuai styles.xml
+                this, sharedView, "photo_transition"
             )
-
             startActivity(intent, options.toBundle())
         }
 
-
-        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        // Observasi data cerita
         viewModel.stories.observe(this) { result ->
             when (result) {
-                is Result.Loading -> {
-                    swipeRefreshLayout.isRefreshing = true
-                }
+                is Result.Loading -> swipeRefreshLayout.isRefreshing = true
                 is Result.Success -> {
                     swipeRefreshLayout.isRefreshing = false
-                    if (result.data.isNullOrEmpty()) {
-                        Toast.makeText(this, "Tidak ada data untuk ditampilkan", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Log.d("MainActivity", "Data: ${result.data}")
-                        adapter.submitList(result.data) // Pastikan adapter mendukung submitList.
-                    }
+                    adapter.submitList(result.data)
                 }
                 is Result.Error -> {
                     swipeRefreshLayout.isRefreshing = false
-                    Toast.makeText(
-                        this,
-                        "Error: ${result.exception.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this, "Error: ${result.exception.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-        // Refresh data saat swipe
-        swipeRefreshLayout.setOnRefreshListener {
-            viewModel.fetchStories()
-        }
-
-        // Ambil cerita saat halaman dimuat
+        swipeRefreshLayout.setOnRefreshListener { viewModel.fetchStories() }
         viewModel.fetchStories()
 
-        val fab: FloatingActionButton = findViewById(R.id.fab) // Pastikan ID sesuai dengan FloatingActionButton di XML
-        fab.setOnClickListener {
-            val intent = Intent(this, AddStoryActivity::class.java)
-            startActivity(intent)
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
+            startActivity(Intent(this, AddStoryActivity::class.java))
         }
     }
-
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
@@ -120,8 +97,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun logout() {
+        val sessionManager = SessionManager(this)
+        sessionManager.clearSession()
         viewModel.logout()
         Toast.makeText(this, "Logout berhasil", Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, LoginActivity::class.java))
@@ -129,3 +107,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
+

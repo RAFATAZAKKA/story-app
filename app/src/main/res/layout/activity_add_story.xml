@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddStoryActivity">
+    tools:context=".add_story.AddStoryActivity">
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressIndicator"
@@ -59,19 +59,34 @@
         app:layout_constraintTop_toTopOf="@+id/cameraButton" />
 
     <!-- Description Text Area -->
-    <EditText
+
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/descriptionEditText"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="16dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:hint="@string/description"
-        android:background="@android:drawable/editbox_background"
-        android:padding="16dp"
-        android:gravity="top"
-        app:layout_constraintHeight_percent="0.2"
+        android:inputType="textMultiLine"
+        android:gravity="top|start"
+        android:minLines="4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cameraButton"
         app:layout_constraintBottom_toTopOf="@+id/uploadButton" />
+<!--    <EditText-->
+<!--        android:id="@+id/descriptionEditText"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_margin="16dp"-->
+<!--        android:hint="@string/description"-->
+<!--        android:background="@android:drawable/editbox_background"-->
+<!--        android:padding="16dp"-->
+<!--        android:gravity="top"-->
+<!--        app:layout_constraintHeight_percent="0.2"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/uploadButton" />-->
 
     <Button
         android:id="@+id/uploadButton"

@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
+    private lateinit var sessionManager: SessionManager
     private lateinit var progressBar: ProgressBar
     private val viewModel: AuthViewModel by viewModels {
         ViewModelFactory(Injection.provideRepository(this))
@@ -26,6 +27,15 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Cek apakah sudah login, jika ya langsung ke MainActivity
+        sessionManager = SessionManager(this)
+        if (sessionManager.isLoggedIn()) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_login)
 
         progressBar = findViewById(R.id.progressBar)
@@ -42,6 +52,12 @@ class LoginActivity : AppCompatActivity() {
                 }
                 is Result.Success -> {
                     progressBar.visibility = View.GONE
+
+                    // Simpan status login dan token
+                    result.data.loginResult?.token?.let { token ->
+                        sessionManager.saveLogin(token)
+                    }
+
                     Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
@@ -55,7 +71,6 @@ class LoginActivity : AppCompatActivity() {
             loginButton.isEnabled = true
         }
 
-        // Handle klik tombol login
         loginButton.setOnClickListener {
             val email = emailField.text.toString().trim()
             val password = passwordField.text.toString().trim()
@@ -68,4 +83,16 @@ class LoginActivity : AppCompatActivity() {
             viewModel.login(email, password)
         }
     }
+
+    // Fungsi untuk animasi fade in pada elemen UI yang alpha-nya diset 0
+    private fun fadeInViews(vararg views: View) {
+        views.forEach { view ->
+            view.animate()
+                .alpha(1f)
+                .setDuration(300)
+                .start()
+        }
+    }
 }
+
+
