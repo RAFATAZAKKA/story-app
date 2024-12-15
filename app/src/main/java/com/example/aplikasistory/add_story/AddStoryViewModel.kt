@@ -9,7 +9,8 @@ import okhttp3.RequestBody
 
 class AddStoryViewModel(private val apiService: ApiService) : ViewModel() {
 
-    fun uploadImage(
+    fun uploadImageWithAuth(
+        token: String,
         file: MultipartBody.Part,
         description: RequestBody,
         onSuccess: (String) -> Unit,
@@ -17,8 +18,13 @@ class AddStoryViewModel(private val apiService: ApiService) : ViewModel() {
     ) {
         viewModelScope.launch {
             try {
-                val response = apiService.uploadImage(file, description)
-                if (response.error == false) {
+
+                val response = apiService.uploadImageWithAuth(
+                    token = "Bearer $token",
+                    file = file,
+                    description = description
+                )
+                if (!response.error!!) {
                     onSuccess(response.message ?: "Upload berhasil")
                 } else {
                     onError(response.message ?: "Terjadi kesalahan")

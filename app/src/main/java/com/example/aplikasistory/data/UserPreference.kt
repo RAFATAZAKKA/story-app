@@ -32,7 +32,7 @@ class UserPreference private constructor(
     suspend fun clearSession() {
         val tokenKey = stringPreferencesKey("token")
         dataStore.edit { preferences ->
-            preferences.clear() // Menghapus semua data di DataStore
+            preferences.clear()
         }
     }
 }

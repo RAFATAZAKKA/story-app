@@ -2,7 +2,6 @@ package com.example.aplikasistory
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -17,7 +16,6 @@ import com.example.aplikasistory.add_story.AddStoryActivity
 import com.example.aplikasistory.data.Injection
 import com.example.aplikasistory.data.Result
 import com.example.aplikasistory.data.StoryAdapter
-import com.example.aplikasistory.data.response.ListStoryItem
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
@@ -30,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Cek status login, jika tidak login, kembali ke LoginActivity
+
         sessionManager = SessionManager(this)
         if (!sessionManager.isLoggedIn()) {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -40,11 +38,11 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        // Toolbar
+
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        // RecyclerView dan SwipeRefresh
+
         val recyclerView = findViewById<RecyclerView>(R.id.rv_stories)
         val swipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
         val adapter = StoryAdapter { story, sharedView ->

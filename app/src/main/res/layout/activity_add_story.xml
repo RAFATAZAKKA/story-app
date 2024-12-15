@@ -58,8 +58,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/cameraButton" />
 
-    <!-- Description Text Area -->
-
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/descriptionEditText"
         android:layout_width="0dp"
@@ -74,19 +72,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cameraButton"
         app:layout_constraintBottom_toTopOf="@+id/uploadButton" />
-<!--    <EditText-->
-<!--        android:id="@+id/descriptionEditText"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_margin="16dp"-->
-<!--        android:hint="@string/description"-->
-<!--        android:background="@android:drawable/editbox_background"-->
-<!--        android:padding="16dp"-->
-<!--        android:gravity="top"-->
-<!--        app:layout_constraintHeight_percent="0.2"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/uploadButton" />-->
 
     <Button
         android:id="@+id/uploadButton"

@@ -1,6 +1,5 @@
 package com.example.aplikasistory.data
 
-import androidx.datastore.core.DataStore
 import com.example.aplikasistory.DataStoreHelper
 import com.example.aplikasistory.data.api.ApiService
 import com.example.aplikasistory.data.response.ErrorResponse
@@ -10,32 +9,31 @@ import com.example.aplikasistory.data.response.RegisterResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import retrofit2.HttpException
 import java.io.IOException
-import java.util.prefs.Preferences
+
 
 class UserRepository(
     private val apiService: ApiService,
-    private val dataStoreHelper: DataStoreHelper // Gunakan DataStoreHelper
+    private val dataStoreHelper: DataStoreHelper
 ) {
 
     suspend fun saveToken(token: String) {
-        dataStoreHelper.saveToken(token) // Panggil metode di DataStoreHelper
+        dataStoreHelper.saveToken(token)
     }
 
-    val token: Flow<String?> = dataStoreHelper.token // Gunakan token flow dari DataStoreHelper
+    val token: Flow<String?> = dataStoreHelper.token
 
-    // Fungsi register
+
     fun register(name: String, email: String, password: String): Flow<Result<RegisterResponse>> {
         return flow {
-            emit(Result.Loading) // Emit loading state
+            emit(Result.Loading)
             try {
                 val response = apiService.register(name, email, password)
-                emit(Result.Success(response)) // Emit response sukses
+                emit(Result.Success(response))
             } catch (e: HttpException) {
                 val errorBody = e.response()?.errorBody()?.string()
                 val errorMessage = if (errorBody != null) {
@@ -50,14 +48,14 @@ class UserRepository(
         }.flowOn(Dispatchers.IO)
     }
 
-    // Fungsi login
+
     fun login(email: String, password: String): Flow<Result<LoginResponse>> {
         return flow {
-            emit(Result.Loading) // Emit loading state
+            emit(Result.Loading)
             try {
                 val response = apiService.login(email, password)
-                response.loginResult?.token?.let { saveToken(it) } // Simpan token setelah login berhasil
-                emit(Result.Success(response)) // Emit response sukses
+                response.loginResult?.token?.let { saveToken(it) }
+                emit(Result.Success(response))
             } catch (e: HttpException) {
                 val errorBody = e.response()?.errorBody()?.string()
                 val errorMessage = errorBody?.let {
@@ -76,7 +74,7 @@ class UserRepository(
             try {
                 val token = dataStoreHelper.token.first() ?: ""
                 val response = apiService.getStories("Bearer $token")
-                val filteredStories = response.listStory?.filterNotNull() // Filter elemen null
+                val filteredStories = response.listStory?.filterNotNull()
                 emit(Result.Success(filteredStories))
             } catch (e: HttpException) {
                 emit(Result.Error(Exception(e.message())))

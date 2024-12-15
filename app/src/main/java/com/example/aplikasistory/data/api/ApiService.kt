@@ -41,9 +41,10 @@ interface ApiService {
     suspend fun getStoryDetail(@Path("id") storyId: String): Story
 
     @Multipart
-    @POST("stories/guest")
-    suspend fun uploadImage(
+    @POST("stories")
+    suspend fun uploadImageWithAuth(
+        @Header("Authorization") token: String,
         @Part file: MultipartBody.Part,
-        @Part("description") description: RequestBody,
+        @Part("description") description: RequestBody
     ): FileUploadResponse
 }

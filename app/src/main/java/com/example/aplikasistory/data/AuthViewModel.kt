@@ -5,10 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.aplikasistory.data.response.LoginResponse
-import com.example.aplikasistory.data.response.LoginResult
 import com.example.aplikasistory.data.response.RegisterResponse
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
@@ -42,7 +40,7 @@ class AuthViewModel(private val repository: UserRepository) : ViewModel() {
                 }
                 .collect { result ->
                     if (result is Result.Success) {
-                        // Simpan token jika login berhasil
+
                         result.data.loginResult?.token?.let { token ->
                             repository.saveToken(token)
                         }

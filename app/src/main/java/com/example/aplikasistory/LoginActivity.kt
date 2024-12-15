@@ -10,12 +10,10 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.example.aplikasistory.data.AuthViewModel
-
 import com.example.aplikasistory.data.Injection
 import com.example.aplikasistory.data.Result
-import kotlinx.coroutines.launch
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,7 +26,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Cek apakah sudah login, jika ya langsung ke MainActivity
         sessionManager = SessionManager(this)
         if (sessionManager.isLoggedIn()) {
             startActivity(Intent(this, MainActivity::class.java))
@@ -43,7 +40,6 @@ class LoginActivity : AppCompatActivity() {
         val passwordField = findViewById<EditText>(R.id.ed_login_password)
         val loginButton = findViewById<Button>(R.id.btn_login)
 
-        // Observasi hasil login dari ViewModel
         viewModel.loginResult.observe(this) { result ->
             when (result) {
                 is Result.Loading -> {
@@ -53,7 +49,6 @@ class LoginActivity : AppCompatActivity() {
                 is Result.Success -> {
                     progressBar.visibility = View.GONE
 
-                    // Simpan status login dan token
                     result.data.loginResult?.token?.let { token ->
                         sessionManager.saveLogin(token)
                     }
@@ -84,7 +79,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // Fungsi untuk animasi fade in pada elemen UI yang alpha-nya diset 0
     private fun fadeInViews(vararg views: View) {
         views.forEach { view ->
             view.animate()

@@ -54,9 +54,9 @@ private fun getImageUriForPreQ(context: Context): Uri {
 fun createCustomTempFile(context: Context): File {
     val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
     return File.createTempFile(
-        "temp_image_", /* Prefix nama file */
-        ".jpg", /* Suffix nama file */
-        storageDir /* Direktori penyimpanan */
+        "temp_image_",
+        ".jpg",
+        storageDir
     )
 }
 

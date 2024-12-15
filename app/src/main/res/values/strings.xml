@@ -17,5 +17,7 @@
     <string name="message_login_page">Masukkan dulu datamu ya</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="empty_description_warning">Deskripsi tidak boleh kosong</string>
+    <string name="token_missing_warning">Token tidak boleh kosong</string>
 
 </resources>

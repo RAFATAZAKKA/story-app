@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withTimeout
+
 
 
 class StoryRepository private constructor(
@@ -29,31 +29,31 @@ class StoryRepository private constructor(
 
     fun getStoryDetail(storyId: String): LiveData<Result<Story>> {
         return liveData(Dispatchers.IO) {
-            emit(Result.Loading) // Menandakan data sedang dimuat
+            emit(Result.Loading)
             try {
-                val response = apiService.getStoryDetail(storyId) // Ganti endpoint sesuai API Anda
-                emit(Result.Success(response)) // Jika berhasil
+                val response = apiService.getStoryDetail(storyId)
+                emit(Result.Success(response))
             } catch (e: Exception) {
-                emit(Result.Error(e)) // Jika terjadi error
+                emit(Result.Error(e))
             }
         }
     }
 
-    // Fungsi untuk mengambil list story
+
     suspend fun getStories(): Flow<Result<List<ListStoryItem>>> {
         return flow {
-            emit(Result.Loading)  // Menandakan data sedang dimuat
+            emit(Result.Loading)
             try {
-                // Ambil token dari UserPreference
+
                 val token = userPreference.getUser().first().token
                 if (token.isEmpty()) throw Exception("Token is missing")
 
-                // Panggil API dengan token
+
                 val response = apiService.getStories("Bearer $token")
-                val nonNullList = response.listStory?.filterNotNull() ?: emptyList()  // Pastikan tidak null
+                val nonNullList = response.listStory?.filterNotNull() ?: emptyList()
                 emit(Result.Success(nonNullList))
             } catch (e: Exception) {
-                emit(Result.Error(e))  // Jika error
+                emit(Result.Error(e))
             }
         }
     }

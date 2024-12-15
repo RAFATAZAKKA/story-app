@@ -15,12 +15,9 @@ class StoryDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_story_detail)
 
         supportPostponeEnterTransition()
-        // Menerima data dari Intent
         val story = intent.getParcelableExtra<ListStoryItem>("story_detail") ?: return
-        val imageView = findViewById<ImageView>(R.id.ivStory) // Mendapatkan ImageView
+        val imageView = findViewById<ImageView>(R.id.ivStory)
 
-
-        // Menampilkan data pada UI
         Glide.with(this)
             .load(story.photoUrl)
             .into(findViewById(R.id.ivStory))
@@ -29,7 +26,6 @@ class StoryDetailActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvDescription).text = story.description
         findViewById<TextView>(R.id.tvDate).text = story.createdAt
 
-        // Lanjutkan transisi setelah elemen siap
         imageView.viewTreeObserver.addOnPreDrawListener(
             object : ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean {

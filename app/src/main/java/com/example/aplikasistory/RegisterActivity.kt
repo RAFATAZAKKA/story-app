@@ -10,7 +10,6 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.aplikasistory.data.Result
 import com.example.aplikasistory.data.AuthViewModel
 import com.example.aplikasistory.data.Injection
