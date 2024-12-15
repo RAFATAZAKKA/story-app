@@ -95,6 +95,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun logout() {
         val sessionManager = SessionManager(this)
         sessionManager.clearSession()

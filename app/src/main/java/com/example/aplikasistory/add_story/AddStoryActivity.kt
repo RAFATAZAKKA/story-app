@@ -1,6 +1,7 @@
 package com.example.aplikasistory.add_story
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.aplikasistory.MainActivity
 import com.example.aplikasistory.R
 import com.example.aplikasistory.SessionManager
 import com.example.aplikasistory.ViewModelFactory
@@ -116,6 +118,12 @@ class AddStoryActivity : AppCompatActivity() {
                     )
                     successResponse.message?.let { showToast(it) }
                     showLoading(false)
+
+
+                    val intent = Intent(this@AddStoryActivity, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+
                 } catch (e: HttpException) {
                     val errorBody = e.response()?.errorBody()?.string()
                     val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
