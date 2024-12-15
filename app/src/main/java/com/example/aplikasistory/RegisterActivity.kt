@@ -65,6 +65,7 @@ class RegisterActivity : AppCompatActivity() {
             val email = emailField.text.toString().trim()
             val password = passwordField.text.toString().trim()
 
+
             if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Semua field harus diisi", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -75,8 +76,15 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+
+            if (password.length < 8) {
+                passwordField.error = "Password tidak boleh kurang dari 8 karakter"
+                return@setOnClickListener
+            }
+
             viewModel.register(name, email, password)
         }
+
     }
 }
 

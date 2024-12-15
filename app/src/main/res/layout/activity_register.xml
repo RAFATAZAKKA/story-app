@@ -86,7 +86,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailEditTextLayout">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.example.aplikasistory.CustomEditText
             android:id="@+id/ed_register_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

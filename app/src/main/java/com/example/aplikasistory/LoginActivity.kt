@@ -75,6 +75,12 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            passwordField.error = if (password.isNullOrEmpty() || password.length < 8) {
+                "Password tidak boleh kurang dari 8 karakter"
+            } else null
+
+            if (passwordField.error != null) return@setOnClickListener
+
             viewModel.login(email, password)
         }
     }
