@@ -1,30 +1,34 @@
 package com.example.aplikasistory
 
 import android.content.Context
+import android.content.SharedPreferences
+
 
 class SessionManager(context: Context) {
 
-    private val sharedPreferences = context.getSharedPreferences("user_session", Context.MODE_PRIVATE)
+    private var prefs: SharedPreferences =
+        context.getSharedPreferences("user_session", Context.MODE_PRIVATE)
 
-    fun saveLogin(token: String?) {
-        sharedPreferences.edit()
-            .putBoolean("is_logged_in", true)
-            .putString("auth_token", token)
-            .apply()
+    companion object {
+        private const val USER_TOKEN = "USER_TOKEN"
     }
 
-    fun isLoggedIn(): Boolean {
-        return sharedPreferences.getBoolean("is_logged_in", false)
+
+    fun saveLogin(token: String) {
+        prefs.edit().putString(USER_TOKEN, token).apply()
     }
 
     fun getToken(): String? {
-        return sharedPreferences.getString("auth_token", null)
+        return prefs.getString(USER_TOKEN, null)
+    }
+
+    fun isLoggedIn(): Boolean {
+        return getToken() != null
     }
 
     fun clearSession() {
-        sharedPreferences.edit()
-            .clear()
-            .apply()
+        prefs.edit().clear().apply()
     }
 }
+
 

@@ -59,6 +59,18 @@ class WelcomeActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
+    override fun onResume() {
+        super.onResume()
+        val sessionManager = SessionManager(this)
+        val token = sessionManager.getToken()
+
+        if (!token.isNullOrBlank()) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+    }
+
+
     private fun setupAction() {
         binding.loginButton.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
