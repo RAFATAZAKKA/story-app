@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- Izin akses internet -->
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -17,6 +17,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AplikasiStory"
         tools:targetApi="31">
+
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAyhLGPKCjrYk_yyiwLPHaJvuvHsBzl7H4" />
+
+        <activity
+            android:name=".map.MapsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".add_story.CameraActivity"
             android:exported="false" />
@@ -26,7 +46,7 @@
         <activity
             android:name=".StoryDetailActivity"
             android:exported="false"
-            android:theme="@style/AppTheme" /> <!-- WelcomeActivity sebagai halaman awal aplikasi -->
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".WelcomeActivity"
             android:exported="true">
@@ -35,13 +55,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Halaman login -->
+        </activity>
         <activity
             android:name=".LoginActivity"
-            android:exported="false" /> <!-- Halaman register -->
+            android:exported="false" />
         <activity
             android:name=".RegisterActivity"
-            android:exported="false" /> <!-- Halaman utama setelah login -->
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
@@ -53,7 +73,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
         <service

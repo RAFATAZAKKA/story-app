@@ -16,6 +16,7 @@ import com.example.aplikasistory.add_story.AddStoryActivity
 import com.example.aplikasistory.data.Injection
 import com.example.aplikasistory.data.Result
 import com.example.aplikasistory.data.StoryAdapter
+import com.example.aplikasistory.map.MapsActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
@@ -91,9 +92,16 @@ class MainActivity : AppCompatActivity() {
                 logout()
                 true
             }
+            R.id.menu_map -> {
+                // Intent untuk berpindah ke MapsActivity
+                val intent = Intent(this, MapsActivity::class.java)
+                startActivity(intent)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 
 
     private fun logout() {

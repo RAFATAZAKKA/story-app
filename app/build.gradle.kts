@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-parcelize")
     id("kotlin-kapt")
+    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
 android {
@@ -75,6 +76,7 @@ dependencies {
 
     // Glide untuk gambar
     implementation("com.github.bumptech.glide:glide:4.15.1")
+    implementation(libs.play.services.maps)
     kapt("com.github.bumptech.glide:compiler:4.15.1")
 
     // Security Crypto
