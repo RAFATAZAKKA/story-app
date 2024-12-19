@@ -3,7 +3,10 @@ package com.example.aplikasistory
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.aplikasistory.data.UserRepository
 import com.example.aplikasistory.data.Result
 import com.example.aplikasistory.data.response.ListStoryItem
@@ -11,6 +14,9 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class StoryViewModel(private val userRepository: UserRepository) : ViewModel() {
+
+    val pagedStories: LiveData<PagingData<ListStoryItem>> =
+        userRepository.getPagedStories().cachedIn(viewModelScope).asLiveData()
 
     private val _stories = MutableLiveData<Result<List<ListStoryItem>>>()
     val stories: LiveData<Result<List<ListStoryItem>>> = _stories

@@ -77,6 +77,7 @@ dependencies {
     // Glide untuk gambar
     implementation("com.github.bumptech.glide:glide:4.15.1")
     implementation(libs.play.services.maps)
+    implementation(libs.androidx.paging.common.android)
     kapt("com.github.bumptech.glide:compiler:4.15.1")
 
     // Security Crypto
@@ -89,4 +90,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation ("androidx.paging:paging-runtime:3.1.1")
 }

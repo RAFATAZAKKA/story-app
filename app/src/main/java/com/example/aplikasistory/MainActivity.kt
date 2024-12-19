@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.aplikasistory.add_story.AddStoryActivity
 import com.example.aplikasistory.data.Injection
-import com.example.aplikasistory.data.Result
 import com.example.aplikasistory.data.StoryAdapter
 import com.example.aplikasistory.map.MapsActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -44,8 +43,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
 
-        val recyclerView = findViewById<RecyclerView>(R.id.rv_stories)
-        val swipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
         val adapter = StoryAdapter { story, sharedView ->
             val intent = Intent(this, StoryDetailActivity::class.java).apply {
                 putExtra("story_detail", story)
@@ -56,25 +53,19 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent, options.toBundle())
         }
 
+        val recyclerView = findViewById<RecyclerView>(R.id.rv_stories)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        recyclerView.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter { adapter.retry() }
+        )
 
-        viewModel.stories.observe(this) { result ->
-            when (result) {
-                is Result.Loading -> swipeRefreshLayout.isRefreshing = true
-                is Result.Success -> {
-                    swipeRefreshLayout.isRefreshing = false
-                    adapter.submitList(result.data)
-                }
-                is Result.Error -> {
-                    swipeRefreshLayout.isRefreshing = false
-                    Toast.makeText(this, "Error: ${result.exception.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
+        viewModel.pagedStories.observe(this) { pagingData ->
+            adapter.submitData(lifecycle, pagingData)
         }
 
-        swipeRefreshLayout.setOnRefreshListener { viewModel.fetchStories() }
-        viewModel.fetchStories()
+        findViewById<SwipeRefreshLayout>(R.id.swipe_refresh).setOnRefreshListener {
+            adapter.refresh()
+        }
 
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
             startActivity(Intent(this, AddStoryActivity::class.java))
@@ -93,7 +84,6 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.menu_map -> {
-                // Intent untuk berpindah ke MapsActivity
                 val intent = Intent(this, MapsActivity::class.java)
                 startActivity(intent)
                 true

@@ -44,25 +44,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Set Toolbar as ActionBar
         setSupportActionBar(binding.toolbar)
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -70,11 +58,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isIndoorLevelPickerEnabled = true
         mMap.uiSettings.isCompassEnabled = true
         mMap.uiSettings.isMapToolbarEnabled = true
-
-        // Add a marker in Sydney and move the camera
-//        val sydney = LatLng(-34.0, 151.0)
-//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
         val dicodingSpace = LatLng(-6.8957643, 107.6338462)
         mMap.addMarker(
@@ -111,6 +94,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setMapStyle()
         addManyMarker()
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.map_options, menu)
@@ -230,13 +215,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun loadStoriesWithLocation() {
-        val apiService = ApiConfig.getApiService() // Gantilah dengan konfigurasi retrofit Anda
+        val apiService = ApiConfig.getApiService()
         lifecycleScope.launch {
             try {
                 val response = apiService.getStoriesWithLocation()
                 if (!response.error!!) {
                     response.listStory?.forEach { story ->
-                        // Pastikan lat & lon tidak null
                         if (story != null) {
                             if (story.lat != null && story.lon != null) {
                                 val position = LatLng(story.lat, story.lon)
@@ -259,9 +243,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
     }
-
-
-
     companion object {
         private const val TAG = "MapsActivity"
     }

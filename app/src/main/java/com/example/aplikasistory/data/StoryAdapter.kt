@@ -3,8 +3,8 @@ package com.example.aplikasistory.data
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aplikasistory.data.response.ListStoryItem
 import com.example.aplikasistory.databinding.ItemStoryBinding
@@ -13,7 +13,7 @@ import com.example.aplikasistory.R
 
 class StoryAdapter(
     private val onItemClick: (ListStoryItem, View) -> Unit
-) : ListAdapter<ListStoryItem, StoryAdapter.StoryViewHolder>(DIFF_CALLBACK) {
+) : PagingDataAdapter<ListStoryItem, StoryAdapter.StoryViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
@@ -52,8 +52,10 @@ class StoryAdapter(
     }
 
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val item = getItem(position)
+        if (item != null) holder.bind(item)
     }
 }
+
 
 
