@@ -1,5 +1,6 @@
 package com.example.aplikasistory
 
+import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.aplikasistory.data.api.ApiService
@@ -23,6 +24,12 @@ class StoryPagingSource(
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
+        }
+    }
+
+    companion object {
+        fun snapshot(items: List<ListStoryItem>): PagingData<ListStoryItem> {
+            return PagingData.from(items)
         }
     }
 

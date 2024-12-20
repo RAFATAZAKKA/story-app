@@ -41,6 +41,9 @@ class StoryViewModel(private val userRepository: UserRepository) : ViewModel() {
     }
 
 
+    fun getAllStories(): LiveData<PagingData<ListStoryItem>> =
+        userRepository.getPagedStories().cachedIn(viewModelScope).asLiveData()
+
     fun logout() {
         viewModelScope.launch {
             userRepository.clearSession()

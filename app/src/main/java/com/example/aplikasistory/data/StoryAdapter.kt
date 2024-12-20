@@ -12,11 +12,11 @@ import com.bumptech.glide.Glide
 import com.example.aplikasistory.R
 
 class StoryAdapter(
-    private val onItemClick: (ListStoryItem, View) -> Unit
+     val onItemClick: (ListStoryItem, View) -> Unit
 ) : PagingDataAdapter<ListStoryItem, StoryAdapter.StoryViewHolder>(DIFF_CALLBACK) {
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
+         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
             override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
                 return oldItem.id == newItem.id
             }
