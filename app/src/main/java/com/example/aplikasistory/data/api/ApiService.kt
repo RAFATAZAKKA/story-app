@@ -33,10 +33,6 @@ interface ApiService {
         @Field("password") password: String
     ): LoginResponse
 
-    @GET("stories")
-    suspend fun getStories(
-        @Header("Authorization") token: String
-    ): StoryResponse
 
     @GET("stories/{id}")
     suspend fun getStoryDetail(@Path("id") storyId: String): Story
@@ -50,16 +46,28 @@ interface ApiService {
     ): FileUploadResponse
 
 
+
     @GET("stories")
     suspend fun getStoriesWithLocation(
+        @Header("Authorization") token: String,
         @Query("location") location: Int = 1
     ): StoryResponse
+
+
 
     @GET("stories")
     suspend fun getStories(
         @Header("Authorization") token: String,
-        @Query("page") page: Int = 1,
-        @Query("size") size: Int = 20
+        @Query("page") page: Int? = null,
+        @Query("size") size: Int? = null
     ): StoryResponse
+
+
+    interface ApiService {
+        @GET("stories?location=1")
+        suspend fun getStoriesWithLocation(
+            @Header("Authorization") token: String
+        ): StoryResponse
+    }
 
 }

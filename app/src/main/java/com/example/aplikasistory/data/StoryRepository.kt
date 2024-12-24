@@ -5,6 +5,7 @@ import androidx.lifecycle.liveData
 import com.example.aplikasistory.data.api.ApiService
 import com.example.aplikasistory.data.response.ListStoryItem
 import com.example.aplikasistory.data.response.Story
+import com.example.aplikasistory.data.response.StoryResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.Flow
@@ -60,5 +61,9 @@ class StoryRepository private constructor(
 
     suspend fun clearSession() {
         userPreference.clearSession()
+    }
+
+    suspend fun getStoriesWithLocation(token: String): StoryResponse {
+        return apiService.getStoriesWithLocation(token, 1)
     }
 }
