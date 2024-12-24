@@ -7,16 +7,15 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.lifecycle.lifecycleScope
 import com.example.aplikasistory.R
 import com.example.aplikasistory.data.api.ApiConfig
 import com.example.aplikasistory.databinding.ActivityMapsBinding
@@ -29,7 +28,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.coroutines.launch
 import com.example.aplikasistory.SessionManager
 
 
@@ -39,51 +37,59 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
 
+    private val viewModel: MapsViewModel by viewModels {
+        MapsViewModelFactory(ApiConfig.getApiService())
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         setSupportActionBar(binding.toolbar)
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        observeViewModel()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+
         configureMapSettings()
         moveToDefaultLocation()
-        loadStoriesWithLocation()
+
+        val sessionManager = SessionManager(this)
+        val token = sessionManager.getToken()
+        if (token.isNullOrEmpty()) {
+            Toast.makeText(this, "Token is missing", Toast.LENGTH_SHORT).show()
+            return
+        }
+        viewModel.loadStoriesWithLocation(token)
+
         setupMapListeners()
         getMyLocation()
         setMapStyle()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.map_options, menu)
-        return true
-    }
+    private fun observeViewModel() {
+        viewModel.stories.observe(this) { stories ->
+            stories.forEach { story ->
+                if (story.lat != null && story.lon != null) {
+                    mMap.addMarker(
+                        MarkerOptions()
+                            .position(LatLng(story.lat, story.lon))
+                            .title(story.name)
+                            .snippet(story.description)
+                    )
+                }
+            }
+        }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.normal_type -> {
-                mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-                true
-            }
-            R.id.satellite_type -> {
-                mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
-                true
-            }
-            R.id.terrain_type -> {
-                mMap.mapType = GoogleMap.MAP_TYPE_TERRAIN
-                true
-            }
-            R.id.hybrid_type -> {
-                mMap.mapType = GoogleMap.MAP_TYPE_HYBRID
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+        viewModel.errorMessage.observe(this) { errorMessage ->
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -118,35 +124,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
             )
             poiMarker?.showInfoWindow()
-        }
-    }
-
-    private fun loadStoriesWithLocation() {
-        val sessionManager = SessionManager(this)
-        val apiService = ApiConfig.getApiService()
-        lifecycleScope.launch {
-            try {
-                val token = "Bearer ${sessionManager.getToken()}"
-                val response = apiService.getStoriesWithLocation(token)
-                if (response.error == false && response.listStory != null) {
-                    response.listStory.forEach { story ->
-                        story?.let {
-                            if (it.lat != null && it.lon != null) {
-                                mMap.addMarker(
-                                    MarkerOptions()
-                                        .position(LatLng(it.lat, it.lon))
-                                        .title(it.name)
-                                        .snippet(it.description)
-                                )
-                            }
-                        }
-                    }
-                } else {
-                    Log.e(TAG, "Error: ${response.message}")
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception: ${e.message}")
-            }
         }
     }
 

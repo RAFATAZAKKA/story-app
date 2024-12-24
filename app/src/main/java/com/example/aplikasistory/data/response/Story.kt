@@ -8,14 +8,18 @@ data class Story(
 	val name: String,
 	val description: String,
 	val photoUrl: String,
-	val createdAt: String
+	val createdAt: String,
+	val lat: Double?,
+	val lon: Double?
 ) : Parcelable {
 	constructor(parcel: Parcel) : this(
 		id = parcel.readString() ?: "",
 		name = parcel.readString() ?: "",
 		description = parcel.readString() ?: "",
 		photoUrl = parcel.readString() ?: "",
-		createdAt = parcel.readString() ?: ""
+		createdAt = parcel.readString() ?: "",
+		lat = parcel.readValue(Double::class.java.classLoader) as? Double,
+		lon = parcel.readValue(Double::class.java.classLoader) as? Double
 	)
 
 	override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -24,6 +28,8 @@ data class Story(
 		parcel.writeString(description)
 		parcel.writeString(photoUrl)
 		parcel.writeString(createdAt)
+		parcel.writeValue(lat)
+		parcel.writeValue(lon)
 	}
 
 	override fun describeContents(): Int = 0
@@ -38,5 +44,6 @@ data class Story(
 		}
 	}
 }
+
 
 
